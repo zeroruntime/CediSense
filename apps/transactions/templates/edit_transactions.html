@@ -1,0 +1,61 @@
+{% load humanize %}
+
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="editTransactionModalLabel">
+        <i class="bi bi-file-earmark-plus"></i> Edit Transaction
+      </h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      <form method="POST" action="{% url 'edit-transactions' %}">
+        {% csrf_token %}
+        <input type="hidden" name="transaction_id" value="{{ transaction.id }}">
+        <div class="row">
+          <div class="mb-3 col-lg-6 col-md-12">
+            <label for="category" class="form-label">Category</label>
+            <select class="form-select" id="category" name="category">
+              <option value="">Select Category</option>
+              {% for income_cat in income_categories %}
+              <option value="{{ income_cat.id }}" 
+                      {% if transaction.category.id == income_cat.id %}selected{% endif %}>
+                {{ income_cat.name }}
+              </option>
+              {% endfor %}
+              {% for expense_cat in expense_categories %}
+              <option value="{{ expense_cat.id }}"
+                      {% if transaction.category.id == expense_cat.id %}selected{% endif %}>
+                {{ expense_cat.name }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="mb-3 col-lg-6 col-md-12">
+            <label for="amount" class="form-label">Amount</label>
+            <div class="input-group">
+              <input type="text" class="form-control" id="amount" name="amount" placeholder="0.00"
+                     value="{{ transaction.amount|floatformat:2 }}">
+              <span class="input-group-text">GHS</span>
+            </div>
+          </div>
+
+          <div class="mb-3 col-12">
+            <label for="date" class="form-label">Date</label>
+            <input type="date" class="form-control" id="date" name="date" 
+                   value="{{ transaction.date|date:'Y-m-d' }}">
+          </div>
+
+          <div class="mb-3 col-12">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" name="description" id="description" rows="1" 
+                      placeholder="Add a note...">{{ transaction.description }}</textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100">Update Transaction</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

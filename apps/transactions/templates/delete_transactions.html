@@ -1,0 +1,52 @@
+{% load humanize %}
+
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="deleteTransactionModalLabel">
+        <i class="bi bi-trash"></i> Delete Transaction
+      </h5>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+      <form method="POST" action="{% url 'delete-transactions' %}">
+        {% csrf_token %}
+        <input type="hidden" name="transaction_id" value="{{ transaction.id }}">
+        
+        <div class="text-center mb-4">
+          <div class="mb-3">
+            <i class="bi bi-exclamation-triangle text-warning" style="font-size: 3rem;"></i>
+          </div>
+          <h4 class="mb-3">Are you sure?</h4>
+          <p class="mb-0">You are about to delete this transaction:</p>
+          <div class="mt-3 p-3 bg-light rounded">
+            <div class="row">
+              <div class="col-6 text-start">
+                <p class="mb-1"><strong>Category:</strong></p>
+                <p class="mb-1"><strong>Amount:</strong></p>
+                <p class="mb-1"><strong>Date:</strong></p>
+                <p class="mb-0"><strong>Description:</strong></p>
+              </div>
+              <div class="col-6 text-end">
+                <p class="mb-1">{{ transaction.category.name }}</p>
+                <p class="mb-1">GHS {{ transaction.amount|floatformat:2|intcomma }}</p>
+                <p class="mb-1">{{ transaction.date|date:"M d, Y" }}</p>
+                <p class="mb-0">{{ transaction.description|default:"No description" }}</p>
+              </div>
+            </div>
+          </div>
+          <p class="mt-3 text-danger">This action cannot be undone.</p>
+        </div>
+
+        <div class="row">
+          <div class="col-6">
+            <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">Cancel</button>
+          </div>
+          <div class="col-6">
+            <button type="submit" class="btn btn-danger w-100">Delete</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
